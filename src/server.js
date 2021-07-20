@@ -1,9 +1,22 @@
-const usuarios = require("./controllers/usuario-controller");
-const tarefas = require("./controllers/tarefa-controller");
-const express = require("express");
+// import libs
+const express = require('express');
 const app = express();
 
-usuarios(app);
-tarefas(app);
+// import controllers
+const usuariosController = require('./controllers/usuario-controller');
+const tarefasController = require('./controllers/tarefa-controller');
 
-app.listen(3050, () => console.log("Servidor funfando na porta 3050"));
+//import models
+const Usuario = require('./models/usuario');
+const Tarefas = require('./models/tarefa');
+
+//import bd
+const bd = require('./infra/sqlite-db');
+
+//mildware
+app.use(express.json());
+//usando rotas
+usuariosController(app, bd);
+tarefasController(app, bd);
+
+app.listen(3050, () => console.log('Servidor funfando na porta 3050'));
