@@ -5,71 +5,114 @@ const Tarefa = require('../models/tarefa');
 module.exports = (app, bd) => {
   const taskDAO = new TaskDAO(bd);
   app.get('/tarefas', async (req, res) => {
-    await taskDAO
-      .getTarefas()
-      .then((result) => {
-        res.json({ result: result });
-      })
-      .catch((err) => {
-        console.log(err);
-        res.json({ menssagem: 'Erro ao encontrar tarefas' });
+    try {
+      let result = await taskDAO.getTarefas();
+      res.status(200).json({
+        result: result,
+        error: false,
       });
+    } catch (error) {
+      res.status(404).json({ error: error.message, error: true });
+    }
   });
   app.get('/tarefas/:id', async (req, res) => {
     let id = req.params.id;
-    await taskDAO
-      .getTarefaTitulo(id)
-      .then((result) => {
-        res.json({ result });
-      })
-      .catch((err) => res.json({ erro: 'Erro ao encontrar Tarefa.' }));
+    try {
+      let result = await taskDAO.getTarefaId(id);
+      if (result.length > 0) {
+        res.status(200).json({
+          result: result,
+          error: false,
+        });
+      } else {
+        throw new Error('Erro ao encontrar Tarefa.');
+      }
+    } catch (error) {
+      res.status(404).json({ error: error.message, error: true });
+    }
   });
 
   app.get('/tarefas/usuarios/:idUser', async (req, res) => {
     let idUser = req.params.idUser;
-    await taskDAO
-      .getTarefaUsuario(idUser)
-      .then((result) => {
-        res.json({ result });
-      })
-      .catch((err) =>
-        res.json({ erro: 'Erro ao encontrar Tarefas ligadas a esse usuário.' })
-      );
+    try {
+      let result = await taskDAO.getTarefaUsuario(idUser);
+      if (result.length > 0) {
+        res.status(200).json({
+          result: result,
+          error: false,
+        });
+      } else {
+        throw new Error('Erro ao encontrar Tarefas ligadas a esse usuário.');
+      }
+    } catch (error) {
+      res.status(404).json({ error: error.message, error: true });
+    }
   });
 
   app.post('/tarefas', async (req, res) => {
     const { titulo, descricao, status, id_usuario } = req.body;
     let novaTarefa = new Tarefa(titulo, descricao, status, id_usuario);
-    console.log(novaTarefa);
-    if ((req.body = {})) {
-      res.json({ mensagem: 'Erro ao adicionar tarefa, dados inválidos!' });
-    } else {
-      await taskDAO
-        .geraTarefa(novaTarefa)
-        .then((result) => {
-          res.json({ mensagem: 'Tarefa adicionada com sucesso' });
-        })
-        .catch((err) => res.json({ err }));
+    try {
+      if (novaTarefa.length < 3 || novaTarefa == {}) {
+        throw new Error('Erro ao adicionar tarefa, dados inválidos!');
+      } else {
+        let result = await taskDAO.geraTarefa(novaTarefa);
+        res.status(201).json({
+          messagem: 'Tarefa adicionada com sucesso!',
+          result: result,
+          error: false,
+        });
+      }
+    } catch (error) {
+      res.status(400).json({ error: error.message, error: true });
     }
   });
   app.put('/tarefas/:id', async (req, res) => {
-    let id = req.params.id;
+    let { id } = req.params.id;
     let body = req.body;
-    await taskDAO
-      .atualizaTarefa(id, body)
-      .then((result) => res.json({ mensagem: 'Tarefa atualizada com sucesso' }))
-      .catch((err) => res.json({ err }));
+    try {
+      if (body == {}) {
+        throw new Error('Erro ao adicionar tarefa,dados inválidos');
+      } else {
+        let result = await taskDAO.atualizaTarefa(id, body);
+        if (result == undefined) {
+          res
+            .status(200)
+            .json({
+              mensagem: 'Tarefa atualizada com sucesso!',
+              result: result,
+              error: false,
+            });
+        }
+      }
+    } catch (error) {
+      res.status(400).json({
+        mensagem: 'Erro ao atualizar tarefa.',
+        error: error.message,
+        error: true,
+      });
+    }
   });
 
-  app.delete('/tarefas/:titulo', async (req, res) => {
-    let parametroTitulo = req.params.titulo;
-    await taskDAO
-      .deletaTarefa(parametroTitulo)
-      .then((result) => {
-        res.json({
-          mensagem: `Tarefa ${parametroTitulo} deletada`,
+  app.delete('/tarefas/:id', async (req, res) => {
+    let { id } = req.params.id;
+    try {
+      let result = await taskDAO.deletaTarefa(id);
+      console.log(result);
+      if (result == undefined) {
+        res.status(200).json({
+          mensagem: 'Tarefa deletada com sucesso',
+          result: result,
+          error: false,
         });
-      })
-      .catch((err) => res.json({ err }));
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(400).json({
+        mensagem: 'Erro ao deletar tarefa',
+        error: error.message,
+        error: true,
+      });
+    }
   });
 };

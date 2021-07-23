@@ -11,7 +11,7 @@ module.exports = (app, bd) => {
         error: false,
       });
     } catch (error) {
-      res.status(404).json({ error: error.message });
+      res.status(404).json({ error: error.message, error: true });
     }
   });
 
@@ -28,7 +28,7 @@ module.exports = (app, bd) => {
         throw new Error('Nenhum usuário encontrado');
       }
     } catch (error) {
-      res.status(404).json({ error: error.message });
+      res.status(404).json({ error: error.message, error: true });
     }
   });
   app.get('/usuarios/tarefas/:idTask', async (req, res) => {
@@ -44,7 +44,7 @@ module.exports = (app, bd) => {
         throw new Error('Nenhum usuário encontrado');
       }
     } catch (error) {
-      res.status(404).json({ error: error.message });
+      res.status(404).json({ error: error.message, error: true });
     }
   });
 
@@ -63,7 +63,7 @@ module.exports = (app, bd) => {
         });
       }
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      res.status(400).json({ error: error.message, error: true });
     }
   });
 
@@ -71,12 +71,24 @@ module.exports = (app, bd) => {
     let emailUpdate = req.params.email;
     let body = req.body;
     try {
-      let result = await userDAO.atualizaUsuario(emailUpdate, body);
-      if (result == undefined) {
-        res.status(200).json({ mensagem: 'Usuário atualizado com sucesso!' });
+      if (body == {}) {
+        throw new Error('Erro ao adicionar usuario,dados inválidos');
+      } else {
+        let result = await userDAO.atualizaUsuario(emailUpdate, body);
+        if (result == undefined) {
+          res.status(200).json({
+            mensagem: 'Usuário atualizado com sucesso!',
+            result: result,
+            error: false,
+          });
+        }
       }
     } catch (error) {
-      res.status(400).json({ mensagem: 'Erro ao atualizar usuário.' });
+      res.status(400).json({
+        mensagem: 'Erro ao atualizar usuário.',
+        error: error.message,
+        error: true,
+      });
     }
   });
   app.delete('/usuarios/:email', async (req, res) => {
@@ -84,10 +96,18 @@ module.exports = (app, bd) => {
     try {
       let result = await userDAO.deletaUsuario(parametroEmail);
       if (result == undefined) {
-        res.status(200).json({ mensagem: 'Usuário deletado com sucesso' });
+        res.status(200).json({
+          mensagem: 'Usuário deletado com sucesso',
+          result: result,
+          error: true,
+        });
       }
     } catch (error) {
-      res.status(400).json({ mensagem: 'Erro ao adiconar usuário' });
+      res.status(400).json({
+        mensagem: 'Erro ao deletar usuário',
+        error: error.message,
+        error: true,
+      });
     }
   });
 };

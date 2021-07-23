@@ -16,7 +16,7 @@ class TaskDAO {
     });
   }
 
-  getTarefaTitulo(id) {
+  getTarefaId(id) {
     let idT = id;
     const selectCondition = 'SELECT * FROM TAREFAS WHERE id = ?';
     return new Promise((resolve, reject) => {
@@ -77,10 +77,10 @@ class TaskDAO {
     });
   }
 
-  deletaTarefa(titulo) {
-    const deletar = 'DELETE * FROM Tarefas WHERE titulo = ?';
+  deletaTarefa(id) {
+    const deletar = 'DELETE  FROM Tarefas WHERE ID = ?';
     return new Promise((resolve, reject) => {
-      this._bd.run(deletar, titulo, (err, rows) => {
+      this._bd.run(deletar, id, (err, rows) => {
         if (err) {
           reject(err);
         } else {
