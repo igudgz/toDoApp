@@ -1,5 +1,5 @@
 const TaskDAO = require('../DAO/TaskDAO');
-const UserDAO = require('../DAO/UserDAO');
+
 const Tarefa = require('../models/tarefa');
 
 module.exports = (app, bd) => {
@@ -52,19 +52,18 @@ module.exports = (app, bd) => {
         .catch((err) => res.json({ err }));
     }
   });
-  app.put('/tarefas/:id', (req, res) => {
+  app.put('/tarefas/:id', async (req, res) => {
     let id = req.params.id;
     let body = req.body;
-    taskDAO
+    await taskDAO
       .atualizaTarefa(id, body)
       .then((result) => res.json({ mensagem: 'Tarefa atualizada com sucesso' }))
       .catch((err) => res.json({ err }));
   });
 
-  app.delete('/tarefas/:titulo', (req, res) => {
+  app.delete('/tarefas/:titulo', async (req, res) => {
     let parametroTitulo = req.params.titulo;
-
-    taskDAO
+    await taskDAO
       .deletaTarefa(parametroTitulo)
       .then((result) => {
         res.json({

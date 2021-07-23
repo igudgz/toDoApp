@@ -1,77 +1,93 @@
 const Usuario = require('../models/usuario');
 const UserDAO = require('../DAO/UserDAO');
+const usuarioTarefas = require('../view/usuarioTarefas');
 module.exports = (app, bd) => {
   let userDAO = new UserDAO(bd);
   app.get('/usuarios', async (req, res) => {
-    await userDAO
-      .getUsuarios()
-      .then((result) => {
-        res.json({ result: result });
-      })
-      .catch((err) => {
-        console.log(err);
-        res.json({ mensagem: 'Erro ao encontrar usuários' });
+    try {
+      let result = await userDAO.getUsuarios();
+      res.status(200).json({
+        result: result,
+        error: false,
       });
+    } catch (error) {
+      res.status(404).json({ error: error.message });
+    }
   });
 
   app.get('/usuarios/:email', async (req, res) => {
     let email = req.params.email;
-    userDAO
-      .getUsuarioEmail(email)
-      .then((result) => {
-        res.json({ result: result });
-      })
-      .catch((err) => res.json({ erro: 'Erro ao encontrar usuário.' }));
+    try {
+      let result = await userDAO.getUsuarioEmail(email);
+      if (result.length > 0) {
+        res.status(200).json({
+          result: result,
+          error: false,
+        });
+      } else {
+        throw new Error('Nenhum usuário encontrado');
+      }
+    } catch (error) {
+      res.status(404).json({ error: error.message });
+    }
   });
-  app.get('/usuarios/tarefas/:idTask', (req, res) => {
+  app.get('/usuarios/tarefas/:idTask', async (req, res) => {
     let idTask = req.params.idTask;
-    userDAO
-      .getUsuarioTarefa(idTask)
-      .then((result) => {
-        res.json({ result });
-      })
-      .catch((err) =>
-        res.json({ erro: 'Erro ao encontrar Tarefas ligadas a esse usuário.' })
-      );
+    try {
+      let result = await userDAO.getUsuarioTarefa(idTask);
+      if (result.length > 0) {
+        res.status(200).json({
+          result: result,
+          error: false,
+        });
+      } else {
+        throw new Error('Nenhum usuário encontrado');
+      }
+    } catch (error) {
+      res.status(404).json({ error: error.message });
+    }
   });
 
   app.post('/usuarios', async (req, res) => {
     const { nome, email, senha } = req.body;
     let novoUsuario = new Usuario(nome, email, senha);
-    if ((req.body = {})) {
-      res
-        .status(404)
-        .json({ mensagem: 'Erro ao adicionar usuário, dados inválidos!' });
-    } else {
-      await userDAO
-        .geraUsuario(novoUsuario)
-        .then((result) =>
-          res.json({
-            messagem: 'Usuário adicionado com sucesso!',
-            result: result,
-          })
-        )
-        .catch((err) =>
-          res.json({ mensagem: 'Erro ao adiconar usuário ao banco de dados.' })
-        );
+    try {
+      if (novoUsuario.length < 3 || novoUsuario == {}) {
+        throw new Error('Erro ao adicionar usuário, dados inválidos!');
+      } else {
+        let result = await userDAO.geraUsuario(novoUsuario);
+        res.status(201).json({
+          messagem: 'Usuário adicionado com sucesso!',
+          result: result,
+          error: false,
+        });
+      }
+    } catch (error) {
+      res.status(400).json({ error: error.message });
     }
   });
 
   app.put('/usuarios/:email', async (req, res) => {
     let emailUpdate = req.params.email;
     let body = req.body;
-    await userDAO
-      .atualizaUsuario(emailUpdate, body)
-      .then((result) =>
-        res.json({ mensagem: 'Usuário atualizado com sucesso!' })
-      )
-      .catch((err) => res.json({ mensagem: 'Erro ao atualizar usuário.' }));
+    try {
+      let result = await userDAO.atualizaUsuario(emailUpdate, body);
+      if (result == undefined) {
+        res.status(200).json({ mensagem: 'Usuário atualizado com sucesso!' });
+      }
+    } catch (error) {
+      res.status(400).json({ mensagem: 'Erro ao atualizar usuário.' });
+    }
   });
-  app.delete('/usuario/:email', async (req, res) => {
+  app.delete('/usuarios/:email', async (req, res) => {
     let parametroEmail = req.params.email;
-    await userDAO
-      .deletaUsuario(parametroEmail)
-      .then((result) => res.json({ mensagem: 'Usuário deletado com sucesso' }))
-      .catch((err) => res.json({ mensagem: 'Erro ao adiconar usuário' }));
+    try {
+      let result = await userDAO.deletaUsuario(parametroEmail);
+      if (result == undefined) {
+        res.status(200).json({ mensagem: 'Usuário deletado com sucesso' });
+      }
+    } catch (error) {
+      res.status(400).json({ mensagem: 'Erro ao adiconar usuário' });
+    }
   });
 };

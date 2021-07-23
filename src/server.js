@@ -1,22 +1,20 @@
 // import libs
 const express = require('express');
+const cors = require('cors');
 const app = express();
 
 // import controllers
-const usuariosController = require('./controllers/usuario-controller');
-const tarefasController = require('./controllers/tarefa-controller');
-
-//import models
-const Usuario = require('./models/usuario');
-const Tarefas = require('./models/tarefa');
+const rotasUsuarios = require('./controllers/usuario-controller');
+const rotasTarefas = require('./controllers/tarefa-controller');
 
 //import bd
 const bd = require('./infra/sqlite-db');
 
 //mildware
 app.use(express.json());
+app.use(cors());
 //usando rotas
-usuariosController(app, bd);
-tarefasController(app, bd);
+rotasUsuarios(app, bd);
+rotasTarefas(app, bd);
 
 app.listen(3050, () => console.log('Servidor funfando na porta 3050'));

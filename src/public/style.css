@@ -1,0 +1,155 @@
+* {
+  box-sizing: border-box;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-image: url('http://getwallpapers.com/wallpaper/full/a/5/d/544750.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+}
+
+.container {
+  height: 100%;
+  align-content: center;
+}
+
+.card {
+  height: 370px;
+  margin-top: auto;
+  margin-bottom: auto;
+  width: 400px;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+.social_icon span {
+  font-size: 60px;
+  margin-left: 10px;
+  color: #ffc312;
+}
+
+.social_icon span:hover {
+  color: white;
+  cursor: pointer;
+}
+
+.card-header h3 {
+  color: white;
+}
+
+.social_icon {
+  position: absolute;
+  right: 20px;
+  top: -45px;
+}
+
+.input-group-prepend span {
+  width: 50px;
+  color: black;
+  border: 0 !important;
+}
+
+input:focus {
+  outline: 0 0 0 0 !important;
+  box-shadow: 0 0 0 0 !important;
+}
+
+.remember {
+  color: white;
+}
+
+.remember input {
+  width: 20px;
+  height: 20px;
+  margin-left: 15px;
+  margin-right: 5px;
+}
+
+.links {
+  color: white;
+}
+
+.links a {
+  margin-left: 4px;
+}
+.ocultar {
+  display: none;
+}
+
+.accordion__container {
+  max-width: 36rem;
+}
+
+.accordion {
+  list-style: none;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0.5rem 2rem -1rem rgba(0, 0, 0, 0.5);
+}
+
+.accordion__input {
+  position: absolute;
+  opacity: 0;
+}
+
+.accordion__row {
+  position: relative;
+  margin: 0;
+}
+
+.accordion__row:not(:last-child) {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.accordion__label {
+  position: relative;
+  padding: 1.2rem 2.7rem 1.2rem 1.2rem;
+  color: #ff619b;
+  font-size: 1.5rem;
+  line-height: 1.4;
+  font-weight: 600;
+  display: block;
+}
+
+.accordion__label:after {
+  content: '';
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  border: solid #ff619b;
+  border-width: 0 3px 3px 0;
+  position: absolute;
+  right: 1.2rem;
+  top: 50%;
+  transform: translateY(-60%) rotate(45deg);
+  transition: transform 0.3s ease-in-out;
+}
+
+.accordion__input:checked + .accordion__label:after {
+  transform: translateY(-25%) rotate(225deg);
+}
+
+.accordion__content {
+  overflow: hidden;
+  max-height: 0;
+  transition: all 0.3s ease-in-out;
+  padding: 0 1rem;
+}
+
+.accordion__content > p {
+  margin: 0 0 1rem;
+  color: #f5f5f5;
+}
+
+.accordion__input:checked ~ .accordion__content {
+  max-height: 100vh;
+}
