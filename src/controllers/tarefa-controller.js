@@ -1,8 +1,8 @@
-const TaskDAO = require('../DAO/TaskDAO');
+import TaskDAO from '../DAO/TaskDAO.js';
 
-const Tarefa = require('../models/tarefa');
+import Tarefa from '../models/tarefa.js';
 
-module.exports = (app, bd) => {
+export default (app, bd) => {
   const taskDAO = new TaskDAO(bd);
   app.get('/tarefas', async (req, res) => {
     try {
@@ -76,13 +76,11 @@ module.exports = (app, bd) => {
       } else {
         let result = await taskDAO.atualizaTarefa(id, body);
         if (result == undefined) {
-          res
-            .status(200)
-            .json({
-              mensagem: 'Tarefa atualizada com sucesso!',
-              result: result,
-              error: false,
-            });
+          res.status(200).json({
+            mensagem: 'Tarefa atualizada com sucesso!',
+            result: result,
+            error: false,
+          });
         }
       }
     } catch (error) {

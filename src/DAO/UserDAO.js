@@ -88,4 +88,4 @@ class UserDAO {
     });
   }
 }
-module.exports = UserDAO;
+export default UserDAO;

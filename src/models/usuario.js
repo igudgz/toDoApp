@@ -5,4 +5,4 @@ class Usuario {
     this.senha = senha;
   }
 }
-module.exports = Usuario;
+export default Usuario;

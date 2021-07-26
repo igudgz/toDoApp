@@ -1,7 +1,7 @@
 /*
 Esse arquivo deve ser executado apenas uma vez para que a o banco seja criado e populado
 */
-const bd = require('./sqlite-db');
+import bd from './sqlite-db.js';
 //==== Usuários
 const USUARIOS_SCHEMA = `
 CREATE TABLE IF NOT EXISTS "USUARIOS" (

@@ -1,7 +1,7 @@
-const Usuario = require('../models/usuario');
-const UserDAO = require('../DAO/UserDAO');
-const usuarioTarefas = require('../view/usuarioTarefas');
-module.exports = (app, bd) => {
+import Usuario from '../models/usuario.js';
+import UserDAO from '../DAO/UserDAO.js';
+
+export default (app, bd) => {
   let userDAO = new UserDAO(bd);
   app.get('/usuarios', async (req, res) => {
     try {
@@ -35,11 +35,9 @@ module.exports = (app, bd) => {
     let idTask = req.params.idTask;
     try {
       let result = await userDAO.getUsuarioTarefa(idTask);
+
       if (result.length > 0) {
-        res.status(200).json({
-          result: result,
-          error: false,
-        });
+        res.status(200).json({ result: result });
       } else {
         throw new Error('Nenhum usuário encontrado');
       }
@@ -52,12 +50,15 @@ module.exports = (app, bd) => {
     const { nome, email, senha } = req.body;
     let novoUsuario = new Usuario(nome, email, senha);
     try {
+      if (nome == '' || email == '' || senha == '') {
+        throw new Error('Erro ao adicionar usuário, dados inválidos!');
+      }
       if (novoUsuario.length < 3 || novoUsuario == {}) {
         throw new Error('Erro ao adicionar usuário, dados inválidos!');
       } else {
         let result = await userDAO.geraUsuario(novoUsuario);
         res.status(201).json({
-          messagem: 'Usuário adicionado com sucesso!',
+          menssagem: 'Usuário adicionado com sucesso!',
           result: result,
           error: false,
         });

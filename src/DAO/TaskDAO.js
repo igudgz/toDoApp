@@ -90,4 +90,4 @@ class TaskDAO {
     });
   }
 }
-module.exports = TaskDAO;
+export default TaskDAO;

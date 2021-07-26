@@ -1,7 +1,10 @@
-const sqlite3 = require('sqlite3').verbose();
-const path = require('path');
-const caminhoArq = path.resolve(__dirname, '../', '../', 'database.db');
-const bd = new sqlite3.Database(caminhoArq);
+import sqlite3 from 'sqlite3';
+
+import { resolve, dirname } from 'path';
+
+const bd = new sqlite3.Database(
+  '/home/igu/Área de Trabalho/backup-windows/Projetos Resilia/todoapp/toDoApp/src/infra/database.db'
+);
 
 //Processamento de sinal
 process.on('SIGINT', () =>
@@ -11,4 +14,4 @@ process.on('SIGINT', () =>
   })
 );
 
-module.exports = bd;
+export default bd;

@@ -1,4 +1,4 @@
-const moment = require('moment');
+import moment from 'moment';
 
 class Tarefa {
   constructor(titulo, descricao, status, criador) {
@@ -9,4 +9,4 @@ class Tarefa {
     this.criador = criador;
   }
 }
-module.exports = Tarefa;
+export default Tarefa;
