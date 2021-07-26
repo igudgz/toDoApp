@@ -2,6 +2,8 @@
 
 Projeto criado para implementar um sistema de lista de tarefas com login utilizando uma API com padrão REST e com o sistema CRUD, com o sqlite foi feito o banco de dados com 2 entidades, USUÁRIOS e TAREFAS
 
+Para uma visualização clique aqui : https://pacific-stream-05411.herokuapp.com/usuarios
+
 ### Instalacao
 
 Para iniciar o sistema, clone o repositório git e no terminal digite o comando abaixo.
